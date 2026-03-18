@@ -53,3 +53,12 @@ func TestSwap(t *testing.T) {
 		t.Errorf("expected 1 on top after swap, got %d", val)
 	}
 }
+
+func TestDup(t *testing.T) {
+	s := New()
+	s.Push(1)
+	s.Dup()
+	if s.Top != 2 {
+		t.Errorf("expected s.Top=2, got %d", s.Top)
+	}
+}

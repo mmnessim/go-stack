@@ -46,5 +46,14 @@ func (s *Stack) Swap() error {
 	return nil
 }
 
+func (s *Stack) Dup() error {
+	if s.Top == 0 {
+		return ErrStackUnderflow
+	}
+	s.Items[s.Top] = s.Items[s.Top-1]
+	s.Top += 1
+	return nil
+}
+
 var ErrStackOverflow = errors.New("Stack overflow")
 var ErrStackUnderflow = errors.New("Stack underflow")
