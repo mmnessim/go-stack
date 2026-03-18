@@ -1,6 +1,9 @@
 package stack
 
-import "errors"
+import (
+	"errors"
+	"fmt"
+)
 
 const CAPACITY = 256
 
@@ -53,6 +56,17 @@ func (s *Stack) Dup() error {
 	s.Items[s.Top] = s.Items[s.Top-1]
 	s.Top += 1
 	return nil
+}
+
+func (s *Stack) Print() {
+	if s.Top == 0 {
+		return
+	}
+	fmt.Print("  ")
+	for idx := range s.Top {
+		fmt.Printf("%d ", s.Items[idx])
+	}
+	fmt.Print("<- Top\n")
 }
 
 var ErrStackOverflow = errors.New("Stack overflow")

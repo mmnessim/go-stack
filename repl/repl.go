@@ -31,5 +31,6 @@ func Repl() {
 		} else {
 			break
 		}
+		s.Print()
 	}
 }
