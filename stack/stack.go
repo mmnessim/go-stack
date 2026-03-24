@@ -35,7 +35,7 @@ func (s *Stack) Pop() (int, error) {
 }
 
 func (s *Stack) Peek() (int, error) {
-	if s.Top < 2 {
+	if s.Top == 0 {
 		return 0, ErrStackUnderflow
 	}
 	return s.Items[s.Top-1], nil
