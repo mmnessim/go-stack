@@ -3,12 +3,14 @@ package stack
 import (
 	"errors"
 	"fmt"
+
+	v "github.com/mmnessim/go-stack/value"
 )
 
 const CAPACITY = 256
 
 type Stack struct {
-	Items [CAPACITY]int
+	Items [CAPACITY]v.Value
 	Top   uint
 }
 
@@ -16,7 +18,7 @@ func New() *Stack {
 	return &Stack{Top: 0}
 }
 
-func (s *Stack) Push(val int) error {
+func (s *Stack) Push(val v.Value) error {
 	if s.Top >= CAPACITY {
 		return ErrStackOverflow
 	}
@@ -25,18 +27,18 @@ func (s *Stack) Push(val int) error {
 	return nil
 }
 
-func (s *Stack) Pop() (int, error) {
+func (s *Stack) Pop() (v.Value, error) {
 	if s.Top == 0 {
-		return 0, ErrStackUnderflow
+		return nil, ErrStackUnderflow
 	}
 	val := s.Items[s.Top-1]
 	s.Top -= 1
 	return val, nil
 }
 
-func (s *Stack) Peek() (int, error) {
+func (s *Stack) Peek() (v.Value, error) {
 	if s.Top == 0 {
-		return 0, ErrStackUnderflow
+		return nil, ErrStackUnderflow
 	}
 	return s.Items[s.Top-1], nil
 }
@@ -64,7 +66,7 @@ func (s *Stack) Print() {
 	}
 	fmt.Print("  ")
 	for idx := range s.Top {
-		fmt.Printf("%d ", s.Items[idx])
+		fmt.Print(s.Items[idx].String(), " ")
 	}
 	fmt.Print("<- Top\n")
 }

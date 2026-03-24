@@ -8,6 +8,7 @@ import (
 	"strings"
 
 	"github.com/mmnessim/go-stack/stack"
+	"github.com/mmnessim/go-stack/value"
 )
 
 func Repl() {
@@ -27,9 +28,9 @@ func Repl() {
 			break
 		}
 		if n, err := strconv.ParseInt(line, 10, 64); err == nil {
-			s.Push(int(n))
+			s.Push(value.Number{V: n})
 		} else {
-			break
+			continue
 		}
 		s.Print()
 	}
