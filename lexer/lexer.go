@@ -14,6 +14,10 @@ type Lexer struct {
 	Position int
 }
 
+func New(input string) *Lexer {
+	return &Lexer{Input: input, Position: 0}
+}
+
 func (l *Lexer) Tokenize() ([]token.Token, error) {
 	toks := []token.Token{}
 	for l.Position < len(l.Input) {
