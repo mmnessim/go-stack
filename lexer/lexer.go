@@ -14,6 +14,18 @@ type Lexer struct {
 	Position int
 }
 
+func (l *Lexer) Tokenize() ([]token.Token, error) {
+	toks := []token.Token{}
+	for l.Position < len(l.Input) {
+		next, err := l.NextToken()
+		if err != nil {
+			return toks, err
+		}
+		toks = append(toks, next)
+	}
+	return toks, nil
+}
+
 func (l *Lexer) NextToken() (token.Token, error) {
 	l.skipWhitespace()
 
@@ -49,6 +61,9 @@ func isWhitespace(char byte) bool {
 
 func (l *Lexer) readNumber() (token.Token, error) {
 	start := l.Position
+	if l.Input[l.Position] == '-' {
+		l.Position++
+	}
 	for l.Position < len(l.Input) && unicode.IsDigit(rune(l.Input[l.Position])) {
 		l.Position += 1
 	}
