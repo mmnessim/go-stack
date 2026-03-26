@@ -4,16 +4,17 @@ import (
 	"bufio"
 	"fmt"
 	"os"
-	"strconv"
 	"strings"
 
+	"github.com/mmnessim/go-stack/lexer"
 	"github.com/mmnessim/go-stack/stack"
-	"github.com/mmnessim/go-stack/value"
+	"github.com/mmnessim/go-stack/vm"
 )
 
 func Repl() {
-	s := stack.New()
 	scanner := bufio.NewScanner(os.Stdin)
+	l := lexer.New("")
+	vm := vm.VM{Stack: *stack.New()}
 
 	for {
 		fmt.Print("> ")
@@ -22,16 +23,22 @@ func Repl() {
 		}
 		line := strings.TrimSpace(scanner.Text())
 		if line == "" {
+			vm.Stack.Print()
 			continue
 		}
 		if line == "bye" {
 			break
 		}
-		if n, err := strconv.ParseInt(line, 10, 64); err == nil {
-			s.Push(value.Number{V: n})
-		} else {
+
+		l.Input = line
+		l.Position = 0
+		toks, err := l.Tokenize()
+		if err != nil {
+			fmt.Println(err)
 			continue
 		}
-		s.Print()
+		vm.Eval(toks)
+
+		vm.Stack.Print()
 	}
 }
