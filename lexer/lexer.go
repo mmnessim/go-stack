@@ -20,10 +20,17 @@ func New(input string) *Lexer {
 
 func (l *Lexer) Tokenize() ([]token.Token, error) {
 	toks := []token.Token{}
-	for l.Position < len(l.Input) {
+	for {
+		l.skipWhitespace()
+		if l.Position >= len(l.Input) {
+			break
+		}
 		next, err := l.NextToken()
 		if err != nil {
 			return toks, err
+		}
+		if next.Type == token.TokenEOF {
+			break
 		}
 		toks = append(toks, next)
 	}
@@ -31,8 +38,6 @@ func (l *Lexer) Tokenize() ([]token.Token, error) {
 }
 
 func (l *Lexer) NextToken() (token.Token, error) {
-	l.skipWhitespace()
-
 	if l.Position >= len(l.Input) {
 		return token.EOFToken(), nil
 	}
