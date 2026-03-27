@@ -24,6 +24,11 @@ func New() *VM {
 
 func (vm *VM) registerBuiltins() {
 	vm.Dictionary["+"] = opAdd
+	vm.Dictionary["-"] = opSubtract
+	vm.Dictionary["*"] = opMult
+	vm.Dictionary["/"] = opDivide
+	vm.Dictionary["bye"] = opBye
+	vm.Dictionary["."] = opPop
 }
 
 func (vm *VM) Eval(tokens []token.Token) error {
@@ -48,9 +53,7 @@ func (vm *VM) Eval(tokens []token.Token) error {
 				break
 			}
 		}
-
 	}
-
 	return nil
 }
 
@@ -84,7 +87,9 @@ func (vm *VM) popTwoNumbers() (int64, int64, error) {
 	xn, ok1 := x.(value.Number)
 	yn, ok2 := y.(value.Number)
 	if !ok1 || !ok2 {
-		return 0, 0, typeError
+		_ = vm.Stack.Push(y)
+		_ = vm.Stack.Push(x)
+		return 0, 0, fmt.Errorf("type error: expected ( num num -- num ), got ( %s %s -- num )", y.TypeOf(), x.TypeOf())
 	}
 	return xn.V, yn.V, nil
 }
@@ -97,6 +102,8 @@ func (vm *VM) popTwoStrings() (string, string, error) {
 	xstr, ok1 := x.(value.Str)
 	ystr, ok2 := y.(value.Str)
 	if !ok1 || !ok2 {
+		_ = vm.Stack.Push(y)
+		_ = vm.Stack.Push(x)
 		return "", "", err
 	}
 	return xstr.V, ystr.V, nil

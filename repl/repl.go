@@ -25,10 +25,6 @@ func Repl() {
 			v.Stack.Print()
 			continue
 		}
-		if line == "bye" {
-			break
-		}
-
 		l.Input = line
 		l.Position = 0
 
